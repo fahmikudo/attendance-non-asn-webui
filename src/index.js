@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import './assets/icons/fontawesome/css/all.min.css'
+import './assets/sass/app.css'
+import './assets/css/circle.css'
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
