@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { NavLink } from "react-router-dom"
-// import AuthAction from '../../Redux/AuthRedux'
+import AuthAction from '../../redux/AuthRedux'
 import { connect } from 'react-redux'
 import * as R from 'ramda'
 
@@ -31,7 +31,7 @@ class Profile extends Component {
   }
 
   logout() {
-    
+    this.props.authLogout()
   }
 
   render() {
@@ -82,4 +82,16 @@ class Profile extends Component {
 
 }
 
-export default Profile
+const mapStateToProps = state => {
+  return {
+    auth: state.auth,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    authLogout: () => dispatch(AuthAction.authLogout())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

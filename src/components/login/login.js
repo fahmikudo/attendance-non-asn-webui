@@ -1,11 +1,74 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, HashRouter, Redirect, NavLink } from "react-router-dom";
+import { BrowserRouter as Router, HashRouter, Redirect } from "react-router-dom";
 import LoadingBar from 'react-top-loading-bar';
 import logo from './../../assets/img/logo.jpg';
+import AuthAction from '../../redux/AuthRedux';
+import { connect } from 'react-redux';
 
 
 class Login extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            username: '',
+            password: '',
+            redirect: props.auth.user ? true : false
+        }
+        this.handleChangeUsername = this.handleChangeUsername.bind(this)
+        this.handleChangePassword = this.handleChangePassword.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
+    }
+
+    handleChangeUsername(event) {
+        this.setState({ username: event.target.value })
+    }
+
+    handleChangePassword(event) {
+        this.setState({ password: event.target.value })
+    }
+
+    handleSubmit(event) {
+        event.preventDefault()
+        this.login()
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (!newProps.auth.fetching) {
+            if (newProps.auth && !newProps.auth.error) {
+                this.setState({ redirect: true });
+                this.onFinishFetch()
+            } else {
+                this.onFinishFetch()
+            }
+        }
+    }
+
+    login() {
+        this.startFetch()
+        const { username, password } = this.state
+        let payload = {
+            username,
+            password
+        }
+        this.props.authRequest(payload);
+    }
+
+    startFetch = () => {
+        this.LoadingBar.continousStart()
+    }
+
+    onFinishFetch = () => {
+        if (typeof this.LoadingBar === "object") this.LoadingBar.complete()
+    }
+
     render() {
+
+        console.info(this.state.redirect)
+        if (this.state.redirect) {
+            return <Redirect push to="/home"></Redirect>
+        }
+
         return (
             <HashRouter history={Router.browserHistory}>
                 <div className="main-content">
@@ -36,7 +99,7 @@ class Login extends Component {
                                     <input
                                         type="text"
                                         className="txt txt-sekunder-color"
-
+                                        value={this.state.username}
                                         onChange={this.handleChangeUsername}
                                         required></input>
                                 </div>
@@ -47,17 +110,16 @@ class Login extends Component {
                                     <input
                                         type="password"
                                         className="txt txt-sekunder-color"
-
+                                        value={this.state.password}
                                         onChange={this.handleChangePassword}
                                         required></input>
                                 </div>
                                 <div className="margin-15px">
-                                    <NavLink to="/home">
-                                        <input
-                                            type="submit"
-                                            value="Sign In"
-                                            className="btn btn-width-all background-green"></input>
-                                    </NavLink>
+                                    <input
+                                        type="submit"
+                                        value="Sign In"
+                                        className="btn btn-width-all background-green">
+                                    </input>
                                 </div>
                             </form>
                         </div>
@@ -69,4 +131,16 @@ class Login extends Component {
 
 }
 
-export default Login
+const mapStateToProps = state => {
+    return {
+        auth: state.auth
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        authRequest: obj => dispatch(AuthAction.authRequest(obj))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

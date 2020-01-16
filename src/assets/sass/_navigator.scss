@@ -670,7 +670,7 @@ $fnHeight: 45px;
 		list-style: none;
 		cursor: pointer;
 		font-size: 10pt;
-		color: $txt-54-color;
+		color: $txt-84-color;
 		&:hover {
 			background-color: #f5f5f5;
 			color: $txt-84-color;
@@ -687,6 +687,7 @@ $fnHeight: 45px;
 			@include grid_2x(40px, 1fr);
 			.col-1 {
 				text-align: center;
+				color: $txt-84-color !important;
 				@include column_1();
 			}
 			.col-2 {
@@ -695,7 +696,10 @@ $fnHeight: 45px;
 		}
 		&.active {
 			background-color: #f8f8f8;
-			color: $green;
+			color: $blue !important;
+			.col-1 {
+				color: $blue !important;
+			}
 		}
 	}
 }

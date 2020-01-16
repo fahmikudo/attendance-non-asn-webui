@@ -16,6 +16,10 @@
 @import 'tree';
 @import 'login';
 @import 'slider';
+@import 'dropDown';
+@import 'search';
+@import 'complexMenu';
+@import 'ddlMenu';
 
 * {
 	padding: 0;
@@ -113,31 +117,33 @@ a {
 		}
 	}
 
+
+	// $widthBigIcon: 70px;
 	&.app-side-big-icon {
-		@include grid_2x(60px, 1fr);
+		@include grid_2x(70px, 1fr);
 		@media (max-width: $max-width) {
-			@include grid_2x(60px, 1fr);
+			@include grid_2x(70px, 1fr);
 		}
 		.app-slide {
 			position: relative;
-			width: 60px;
+			width: 70px;
 			height: 100vh;
 			@media (max-width: $max-width) {
-				width: 60px;
+				width: 70px;
 			}
 			.slide-content {
 				position: fixed;
-				width: 60px;
+				width: 70px;
 				@media (max-width: $max-width) {
-					width: 60px;
+					width: 70px;
 				}
 			}
 		}
 		.app-panel {
 			.panel-content {
-				width: calc(100% - 80px);
+				width: calc(100% - 90px);
 				@media (max-width: $max-width) {
-					width: calc(100% - 60px);
+					width: calc(100% - 90px);
 				}
 			}
 		}
@@ -242,6 +248,25 @@ a {
 				width: 100%;
 			}
 		}
+		.complex {
+			.complex-menu {
+				@include grid_none();
+				text-align: center;
+				.complex-icon {
+					text-align: center;
+					font-size: 12pt;
+				}
+				.complex-title {
+					display: none;
+				}
+				.complex-sign {
+					display: none;
+				}
+			}
+			.complex-list {
+				left: 70px;
+			}
+		}
 	}
 
 	&.app-side-min {
@@ -256,10 +281,13 @@ a {
 			}
 		}
 		.app-panel {
+			@media (max-width: $max-width) {
+				width: calc(100% - 150px);
+			}
 			.panel-content {
 				width: calc(100% - 80px);
 				@media (max-width: $max-width) {
-					width: calc(100% - 80px);
+					width: calc(100% - 200px);
 				}
 			}
 		}
@@ -425,7 +453,7 @@ a {
 			display: none;
 			&:checked ~ .list {
 				cursor: pointer;
-				background-color: rgba($color: #000000, $alpha: 0.1);
+				// background-color: rgba($color: #000000, $alpha: 0.1);
 				color: rgba($color: #fff, $alpha: 0.8);
 				.app-space-sign{
 					&:after {
@@ -442,7 +470,9 @@ a {
 			&:checked ~ .app-space-content {
 				@include animate_1();
 				display: block;
-				background-color: rgba($color: #000000, $alpha: 0.1);
+				// background-color: rgba($color: #000000, $alpha: 0.1);
+				// border-top: 0.5px rgba($color: #fff, $alpha: 0.84) solid;
+				// border-bottom: 0.5px rgba($color: #fff, $alpha: 0.84) solid;
 			}
 		}
 		.list {
@@ -759,6 +789,23 @@ a {
 			display: block;
 			@include animate_2();
 		}
+		&:not(:first-child) {
+			@include animate_2();
+		}
+		.popup-panel {
+			position: relative;
+			width: calc(100% - 30px);
+			height: 40px;
+			padding: 5px 15px;
+			border-bottom: $border1;
+			color: $txt-84-color;
+		}
+		.popup-title {
+			@include post_center(relative);
+			color: $txt-84-color;
+			font-weight: 600;
+			font-size: 16px;
+		}
 		.popup-content {
 			position: relative;
 			margin: auto;
@@ -818,8 +865,13 @@ a {
 		.popup-scroll {
 			position: relative;
 			width: 100%;
-			height: calc(100vh - 130px);
+			max-height: calc(100vh - 130px);
 			overflow-y: auto;
+		}
+		.popup-alert {
+			@include post_center(absolute);
+			overflow: hidden;
+			width: 350px;
 		}
 	}
 
@@ -868,10 +920,69 @@ a {
 		}
 	}
 
-
 	// app side page
-	$hgAppPage: calc(100vh - 60px);
-	$hgAppPage2: calc(100vh - 120px);
+	$hgAppPage: calc(100vh - 50px);
+	$hgAppPage2: calc(100vh - 110px);
+	.app-resize-page {
+		position: relative;
+		width: 100%;
+		height: $hgAppPage;
+		overflow: hidden;
+		.a-s-p-main {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			@include animate_2();
+		}
+		.a-s-p-side {
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 100%;
+			height: 100%;
+			// background-color: $blue;
+			// display: inline-block;
+			// vertical-align: top;
+			@include animate_2();
+			.a-s-p-top {
+				width: calc(100% - 10px);
+				height: 45px;
+				overflow: hidden;
+				padding: 7.5px 5px;
+				.txt-site {
+					@include post_top(absolute);
+					padding-top: 5px;
+					left: 15px;
+				}
+			}
+		}
+		.a-s-p-top {
+			position: relative;
+			width: 100%;
+			height: 45px;
+			overflow: hidden;
+			padding: 7.5px 0;
+		}
+		.a-s-p-mid {
+			position: relative;
+			width: 100%;
+			height: $hgAppPage2;
+			overflow-y: auto;
+			overflow-x: hidden;
+			@include transparantScrollBar();
+			&.no-header {
+				height: calc(100vh - 50px);
+			}
+		}
+		.a-s-p-pad {
+			position: relative;
+			width: calc(100% - 15px);
+			padding: 0 7.5px;
+		}
+	}
+
 	.app-side-page {
 		position: relative;
 		width: 100%;
@@ -884,186 +995,23 @@ a {
 			width: 100%;
 			height: 100%;
 			@include animate_2();
-			@include grid_2x(30px, 1fr);
-			&.op-a-s-p-main {
-				@include grid_2x(290px, 1fr);
-			}
-
-			.a-s-p-navigator {
-				position: relative;
-				width: 100%;
-				height: 100%;
-				.a-s-p-list {
-					position: relative;
-					width: 30px;
-					height: 100%;
-					ul {
-						li {
-							position: relative;
-							width: 100%;
-							list-style: none;
-							padding: 0 0;
-							cursor: pointer;
-							border-radius: 5px;
-							&:hover {
-								background-color: #f8f8f8;
-							}
-							.top {
-								position: relative;
-								overflow: hidden;
-								writing-mode: vertical-rl;
-							    text-orientation: mixed;
-
-							    -webkit-transform: translate(0, 0);
-							       -moz-transform: translate(0, 0);
-							        -ms-transform: translate(0, 0);
-							         -o-transform: translate(0, 0);
-							            transform: translate(0, 0);
-
-							    text-transform: uppercase;
-								font-size: 12px;
-								font-weight: 600;
-								padding: 15px 0;
-								text-align: center;
-								color: $txt-84-color;
-
-								.ttl {
-									line-height: 30px;
-								}
-								.lbl{
-									display: none;
-									cursor: pointer;
-								}
-								.icn {
-									line-height: 30px;
-									margin-right: 0;
-									margin-bottom: 0;
-									font-size: 16px;
-								}
-								.cl {
-									display: none;
-								}
-							}
-							.mid {
-								display: none;
-							}
-							&.a-s-p-open {
-								position: absolute;
-								top: 0;
-								left: 40px;
-								width: 250px;
-								height: $hgAppPage;
-								border-radius: 0;
-								z-index: 100;
-								cursor: default;
-								background-color: #fff;
-								// border-top: $border;
-								// border-right: $border;
-								&:hover {
-									background-color: #fff;
-								}
-								.top {
-									position: relative;
-									width: 100%;
-									height: 35px;
-									padding: 0 0;
-									border-bottom: $border;
-
-									writing-mode: horizontal-tb;
-									text-align: left;
-									text-orientation: unset;
-
-									-webkit-transform: translate(0, 0);
-								       -moz-transform: translate(0, 0);
-								        -ms-transform: translate(0, 0);
-								         -o-transform: translate(0, 0);
-								            transform: translate(0, 0);
-
-								    @include grid_2x(1fr, 35px);
-								    .ttl {
-								    	line-height: 35px;
-										padding-left: 10px;
-									}
-									.lbl {
-										display: block;
-										cursor: default;
-									}
-									.icn {
-										margin-right: 10px;
-										line-height: 35px;
-										font-size: 12px;
-									}
-								    .cl {
-								    	display: block;
-								    }
-								}
-								.mid {
-									position: relative;
-									width: 100%;
-									height: calc(100vh - 160px);
-									display: block;
-									overflow-y: auto;
-								}
-							}
-						}
-					}
-				}
-			}
-			.a-s-p-item-navigator {
-				position: relative;
-				width: calc(100% - 20px);
-				padding: 10px;
-				border-bottom: $border;
-				font-size: 11pt;
-				color: $txt-54-color;
-				&:hover {
-					background-color: #f5f5f5;
-					color: $txt-84-color;
-					cursor: pointer;
-				}
-			}
-			.a-s-p-place {
-				position: relative;
-				width: 100%;
-				background-color: #fff;
-				// @include animate_2();
-				.a-s-p-top {
-					position: relative;
-					width: 100%;
-					height: 55px;
-				}
-				.a-s-p-mid {
-					position: relative;
-					// padding: 0 15px;
-					// width: calc(100% - 30px);
-					width: 100%;
-					height: $hgAppPage2;
-					overflow-y: auto;
-					overflow-x: hidden;
-				}
-				.a-s-p-pad {
-					position: relative;
-					width: calc(100% - 15px);
-					padding: 0 7.5px;
-				}
-			}
 		}
 		.a-s-p-side {
 			position: absolute;
 			top: 0;
-			right: -300px;
-			width: 300px;
+			right: -450px;
+			width: 450px;
 			height: 100%;
 			// background-color: $blue;
 			// display: inline-block;
 			// vertical-align: top;
 			@include animate_2();
 		}
-
+	
 		&.op-app-side {
 			// @include grid_2x(1fr, 300px);
 			.a-s-p-main {
-				width: calc(100% - 315px);
+				width: calc(100% - 450px);
 				@include animate_2();
 			}
 			.a-s-p-side {
@@ -1071,7 +1019,111 @@ a {
 				@include animate_2();
 			}
 		}
+
+		.a-s-p-place {
+			position: relative;
+			width: 100%;
+			background-color: #fff;
+			// display: none;
+			// @include animate_2();
+			&.a-s-p-content {
+				display: none;
+				&.active {
+					display: block;
+				}
+			}
+		}
+
+		.a-s-p-top {
+			position: relative;
+			width: 100%;
+			height: 45px;
+			overflow: hidden;
+			padding: 7.5px 0;
+		}
+		.a-s-p-mid {
+			position: relative;
+			// padding: 0 15px;
+			// width: calc(100% - 30px);
+			width: 100%;
+			height: $hgAppPage2;
+			overflow-y: auto;
+			overflow-x: hidden;
+			@include transparantScrollBar();
+			&.no-header {
+				height: calc(100vh - 50px);
+			}
+		}
+		.a-s-p-pad {
+			position: relative;
+			width: calc(100% - 15px);
+			padding: 0 7.5px;
+		}
 	}
+
+	.app-open-close {
+		position: relative;
+		width: 100%;
+		.app-open-close-input {
+			display: none;
+			&:checked ~ .app-open-close-content {
+				display: none;
+				@include animate_1();
+			}
+			&:checked ~ .grid {
+				.col-2 {
+					label {
+						.app-open-close-icon {
+							&:after {
+								@include animate_1();
+								top: 12px;
+								-webkit-transform: rotate(45deg);
+								   -moz-transform: rotate(45deg);
+									-ms-transform: rotate(45deg);
+									 -o-transform: rotate(45deg);
+										transform: rotate(45deg);
+							}
+						}
+					}
+				}
+			}
+		}
+		.app-open-close-icon {
+			position: relative;
+			width: 35px;
+			height: 35px;
+			line-height: 35px;
+			border: 1px rgba($color: #000000, $alpha: 0.1) solid;
+			cursor: pointer;
+			border-radius: 35px;
+			display: inline-block;
+			vertical-align: top;
+			&:hover {
+				border: 1px rgba($color: #000000, $alpha: 0.2) solid;
+			}
+			&:after {
+				@include animate_1();
+				content: "";
+				position: absolute;
+				right: 13px;
+				top: 15px;
+				width: 6px;
+				height: 6px;
+				border: solid rgba($color: #000, $alpha: 0.7);
+				border-width: 0 2px 2px 0;
+				-webkit-transform: rotate(-135deg);
+				   -moz-transform: rotate(-135deg);
+					-ms-transform: rotate(-135deg);
+					 -o-transform: rotate(-135deg);
+						transform: rotate(-135deg);
+			}
+		}
+		.app-open-close-content {
+			display: block;
+			@include animate_1();
+		}
+	}
+	
 
 	.app-pointer {
 		cursor: pointer;
@@ -1088,7 +1140,7 @@ a {
 		padding: 0 0;
 		display: flex;
 		// align-items: center;
-		flex-gap: 10px;
+		// flex-gap: 10px;
 		overflow-x: auto;
 		.a-k-board {
 			position: relative;
@@ -1142,4 +1194,80 @@ a {
 		}
 	}
 
+}
+
+.time_picker_container {
+	// z-index: 100;
+	.react_times_button {
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, .15) !important;
+		-moz-box-shadow: 0 0 0 0 rgba(0, 0, 0, .15) !important;
+		-webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, .15) !important;
+		border-radius: 5px;
+		border: $border1;
+		overflow: hidden;
+		&.time_picker_preview {
+			height: 40px;
+			&.disabled {
+				background-color: #E6E6E6 !important;
+			}
+		}
+		.wrapper {
+			.preview_container {
+				height: 40px;
+				line-height: 40px;
+				svg {
+					top: 9px;
+					width: 20px;
+					height: 20px;
+				}
+			}
+		}
+	}
+	.outside_container {
+		&.active {
+			.modal_container {
+				@include animate_1();
+				display: block;
+				z-index: 1000 !important;
+			}
+		}
+		.modal_container {
+			@include animate_1();
+			display: none;
+			min-width: 300px !important;
+			width: 100% !important;
+			margin-bottom: 20px;
+			-webkit-transform: scale(1) translateY(0px) !important;
+			   -moz-transform: scale(1) translateY(0px) !important;
+			    -ms-transform: scale(1) translateY(0px) !important;
+			     -o-transform: scale(1) translateY(0px) !important;
+			        transform: scale(1) translateY(0px) !important;
+			.time_picker_modal_header {
+				background-color: $blue !important;
+			}
+			.time_picker_modal_footer {
+				background-color: $blue !important;
+			}
+			.picker_pointer {
+				background-color: $blue !important;
+			}
+			.picker_center {
+				background-color: $blue !important;
+			}
+			.pointer_drag {
+				background-color: $blue !important;
+			}
+		}
+	}
+	.picker_container {
+		margin: auto;
+		margin-top: 0;
+		margin-bottom: 20px;
+		z-index: 100;
+	}
+	.time_picker_preview {
+		&.disabled {
+			background-color: #E6E6E6 !important;
+		}
+	}
 }

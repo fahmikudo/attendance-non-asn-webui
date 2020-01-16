@@ -1,29 +1,30 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, NavLink, HashRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
 import Login from './components/login/login'
+import QrCode from './components/qrcode/qrcode'
 import Home from './components/dashboard/home'
 import ProfilePopup from './modules/popup/Profile'
 import './App.css';
 import Position from './components/position/position'
+import Room from './components/room/room'
+import Schedule from './components/schedule/schedule'
 
 // icon
 let angle = 'fa fa-lg fa-angle-right'
-let close = 'fa fa-lg fa-times'
 
 // sub menu
 let opSubMenu = 'app-menu app-submenu-themes app-submenu'
-let clSubMenu = 'app-menu app-submenu-themes'
 
 let opMenu = 'list'
-let clMenu = 'list active'
 
 class App extends Component {
 
-  constructor () {
+  constructor() {
 
     super()
     this.state = {
-    	appClass: 'app', //app-side-big-icon
+      appClass: 'app', //app-side-big-icon
       appButtonClass: 'fa fa-lg fa-bars',
       travelClass: opMenu,
       travelSubmenu: opSubMenu,
@@ -44,15 +45,19 @@ class App extends Component {
 
   }
 
-  render(){
+  render() {
     return (
       <HashRouter history={Router.browserHistory}>
+         
         <div>
-            {/* Single Page */}
+          {/* Single Page */}
           <div className="app">
             <Route exact path="/" component={Login} />
           </div>
-          
+          <div className="app">
+            <Route exact path="/qrcode" component={QrCode} />
+          </div>
+
           {/* Multiple Page */}
           <div className={this.state.appClass}>
             <div className="app-slide">
@@ -64,10 +69,10 @@ class App extends Component {
                     </h1>
                   </div>
                   <div className="col-2">
-                    <button 
-                      className="btn btn-grey btn-circle" 
-                      onClick={ this.opSlide }>
-                      <i className={ this.state.appButtonClass } />
+                    <button
+                      className="btn btn-grey btn-circle"
+                      onClick={this.opSlide}>
+                      <i className={this.state.appButtonClass} />
                     </button>
                   </div>
                 </div>
@@ -75,29 +80,55 @@ class App extends Component {
                 <div className="slide-list change-scrollbar">
                   <div className="app-space">
                     <input type="radio" name="mainmenu" id="mainmenu-dashboard" />
-                      <NavLink to='/home'>
-                        <label htmlFor="mainmenu-dashboard" className="list">
-                            <span className="app-space-icon">
-                              <i className="fa fa-1x fa-home" />
+                    <NavLink to='/home'>
+                      <label htmlFor="mainmenu-dashboard" className="list">
+                        <span className="app-space-icon">
+                          <i className="fa fa-1x fa-home" />
+                        </span>
+                        <span className="app-space-text">
+                          DASHBOARD
                             </span>
-                            <span className="app-space-text">
-                              DASHBOARD
-                            </span>
-                        </label>
-                      </NavLink>
+                      </label>
+                    </NavLink>
                   </div>
                   <div className="app-space">
                     <input type="radio" name="mainmenu" id="mainmenu-position" />
-                      <NavLink to='/position'>
-                        <label htmlFor="mainmenu-dashboard" className="list">
-                            <span className="app-space-icon">
-                              <i className="fa fa-1x fa-home" />
-                            </span>
-                            <span className="app-space-text">
-                              POSITION
-                            </span>
-                        </label>
-                      </NavLink>
+                    <NavLink to='/position'>
+                      <label htmlFor="mainmenu-dashboard" className="list">
+                        <span className="app-space-icon">
+                          <i className="fa fa-1x fa-random" />
+                        </span>
+                        <span className="app-space-text">
+                          JABATAN
+                        </span>
+                      </label>
+                    </NavLink>
+                  </div>
+                  <div className="app-space">
+                    <input type="radio" name="mainmenu" id="mainmenu-schedule" />
+                    <NavLink to='/room'>
+                      <label htmlFor="mainmenu-dashboard" className="list">
+                        <span className="app-space-icon">
+                          <i className="fa fa-1x fa-building" />
+                        </span>
+                        <span className="app-space-text">
+                          RUANGAN
+                        </span>
+                      </label>
+                    </NavLink>
+                  </div>
+                  <div className="app-space">
+                    <input type="radio" name="mainmenu" id="mainmenu-room" />
+                    <NavLink to='/schedule'>
+                      <label htmlFor="mainmenu-dashboard" className="list">
+                        <span className="app-space-icon">
+                          <i className="fa fa-1x fa-calendar" />
+                        </span>
+                        <span className="app-space-text">
+                          JADWAL
+                        </span>
+                      </label>
+                    </NavLink>
                   </div>
                 </div>
               </div>
@@ -123,17 +154,25 @@ class App extends Component {
                   </div>
                 </div>
               </div>
-            <div className="app-place">
-              <Route exact path="/home" component={Home} />
-              <Route exact path="/position" component={Position} />
-            </div>
+              <div className="app-place">
+                <Route exact path="/home" component={Home} />
+                <Route exact path="/position" component={Position} />
+                <Route exact path="/room" component={Room} />
+                <Route exact path="/schedule" component={Schedule} />
+              </div>
             </div>
           </div>
         </div>
       </HashRouter>
     );
   }
-  
+
 }
 
-export default App;
+const mapStateToProps = state => {
+	return {
+		auth: state.auth
+	};
+};
+
+export default connect(mapStateToProps, null)(App)

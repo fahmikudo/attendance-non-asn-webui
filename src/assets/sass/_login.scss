@@ -10,10 +10,10 @@
 	@include transparantScrollBar();
 	.login-content {
 		@include post_center(relative);
-		width: 700px;
-		padding: 25px;
-		background-color: rgba($color: $blue, $alpha: 0.7);
-		border-radius: 10px;
+		width: 900px;
+		background-color: #fff;
+		border-radius: 5px;
+		// border: $border1;
 		overflow: hidden;
 		@media (max-width: $max-width) {
 			@include post_none();
@@ -29,8 +29,8 @@
 		width: 350px;
 		padding: 20px;
 		background-color: #fff;
-		border-radius: 7.5px;
-		border: $border1;
+		border-radius: 5px;
+		// border: $border1;
 		@media (max-width: $max-width) {
 			@include post_none();
 			margin: auto;

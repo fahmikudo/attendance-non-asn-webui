@@ -16,7 +16,8 @@ class Pages extends Component {
       clEditAble: '',
       editAble: false,
       rawData: [],
-      dataTable: []
+      dataTable: [],
+      createVisible: false
     }
   }
 

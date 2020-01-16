@@ -59,10 +59,7 @@ class PopUp extends Component {
                     <i className="fa fa-lw fa-bell"/>
                 </div>                        
                 <div className="padding-20px" style={{textAlign: 'center', fontWeight:'bold', color:'white'}}>
-                    YOU SHOULD READ THIS!
-                </div>
-                <div className="padding-20px" style={{textAlign: 'center', fontSize:10, color:'white'}}>
-                    A small river named Duden flows by their place and supplies it with the necessary regelialia.
+                    Apakah Anda Yakin Menghapus Data Ini ?
                 </div>
                 <div className="padding-15px grid grid-2x" style={{alignContent: 'center'}}>
                     <div className="col-1">
@@ -77,7 +74,6 @@ class PopUp extends Component {
                     <button 
                         className="btn padding-5px" 
                         type="button"
-                        style={{color:'#eee', backgroundColor:'#FF7F50'}}
                         onClick={ this.props.onClick }>
                         <span>CLOSE</span>
                     </button>

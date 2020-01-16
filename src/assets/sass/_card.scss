@@ -257,7 +257,7 @@
         }
         .page-link {
             padding: 10px;
-            height: 45px;
+            height: 40px;
             border: $border;
             border-radius: 5px;
             margin: 0 5px;
@@ -357,27 +357,54 @@
 .card-date-picker {
     position: relative;
     width: 100%;
+    min-width: 100%;
     .input {
         position: relative;
-        width: calc(100% - 30px);
-        padding: 15px;
-        background-color: #fff;
-        color: $txt-84-color;
-        font-size: 11pt;
-        font-weight: 500;
-        &:focus {
-            color: $red;
+        width: 100%;
+        .ip {
+            position: relative;
+            width: calc(100% - 30px);
+            padding: 12px 15px;
+            background-color: #fff;
+            color: $txt-84-color;
+            font-size: 13px;
+            font-weight: 500;
+            // &:focus {
+            //     color: $red;
+            // }
+            // &:focus + .place-date-picker {
+            //     display: block;
+            // }
         }
-        &:focus + .place-date-picker {
-            display: block;
+        .cl {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 43px;
+            height: 43px;
+            line-height: 43px;
+            text-align: center;
+            cursor: pointer;
+            background-color: #fff;
+            color: $txt-54-color;
+            font-size: 13px;
+            display: none;
+            &:hover {
+                color: $txt-84-color;
+            }
+        }
+        &:hover {
+            .cl {
+                display: block;
+            }
         }
     }
     .place-date-picker {
         position: absolute;
         top: 0;
         left: 0;
-        z-index: 10;
-        border: $border;
+        z-index: 1000;
+        border: 1px rgba(0,0,0,0.1) solid;
         width: 100px;
         height: 100px;
         background-color: #fff;
@@ -385,25 +412,61 @@
     }
     .double {
         position: relative;
-        height: 45px;
-        border: $border;
+        height: 40px;
+        border: 1px rgba(0,0,0,0.1) solid;
         background-color: #fff;
-        border-radius: 10px;
+        border-radius: 5px;
         overflow: hidden;
         display: flex;
     }
     .content {
         position: absolute;
         top: 40px;
-        z-index: 10;
-        border: $border;
+        width: 100%;
+        min-width: 320px;
+        z-index: 1000;
+        border: 1px rgba(0,0,0,0.1) solid;
         box-shadow: $shadow;
         background-color: #fff;
         margin-bottom: 15px;
+        border-radius: 5px;
+        box-shadow: $shadow;
+        display: none;
         &.right {
             right: 0 !important;
         }
+        &.content-popup-center {
+            @include post_center(fixed);
+        }
+        &.active {
+            display: block;
+        }
+        .m-input-moment {
+            width: calc(100% - 30px) !important;
+            border: 0 solid #000;
+        }
+        .rdrCalendarWrapper {
+            position: relative;
+            width: calc(100%);
+            top: -15px;
+            .rdrMonthAndYearWrapper {
+                padding: 0 0;
+            }
+            .rdrMonthAndYearPickers {
+                width: 100% !important;
+            }
+            .rdrMonth {
+                padding: 0 0;
+                width: 100% !important;
+            }
+        }
     }
+}
+
+.card-time-picker {
+    position: relative;
+    display: block;
+    width: 100%;
 }
 
 .card-form {
@@ -458,6 +521,207 @@
         .cf-message {
             font-size: 13px;
             color: $txt-34-color;
+        }
+    }
+}
+
+.card-org {
+    position: relative;
+    border: $border1;
+    border-radius: 5px;
+    margin: auto;
+    background-color: #fff;
+    .co-top {
+        position: relative;
+        width: calc(100% - 30px);
+        padding: 10px 15px;
+        &.co-grid {
+            @include grid_2x(45px, 1fr);
+            @include grid_gap(10px);
+            text-align: left;
+            .co-col-1 {
+                @include column_n(1);
+                text-align: center;
+            }
+            .co-col-2 {
+                @include column_n(2);
+            }
+        }
+    }
+    .co-bot {
+        position: relative;
+        width: calc(100% - 30px);
+        padding: 5px 15px;
+        border-top: $border1;
+    }
+}
+
+.card-flipping {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    perspective: 1000px;
+    
+    .card-body {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        -webkit-transform-style: preserve-3d;
+           -moz-transform-style: preserve-3d;
+            -ms-transform-style: preserve-3d;
+             -o-transform-style: preserve-3d;
+                transform-style: preserve-3d;
+        -webkit-transition: all .7s linear;
+           -moz-transition: all .7s linear;
+            -ms-transition: all .7s linear;
+             -o-transition: all .7s linear;
+                transition: all .7s linear;
+        .card-side {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 5px;
+            background-color: #fff;
+            // backsface-visibility: hidden;
+            box-shadow: $shadow;
+        }
+        .card-content {
+            position: relative;
+            width: 100%;
+        }
+        .side-front {
+            z-index: 2;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 1s ease-in, visibility .75s linear;
+            &[class^=col-xs]:first-of-type {
+              padding-left: 0;
+            }
+        }
+        .side-back {
+            z-index: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in, visibility .75s linear;
+            -webkit-transform: rotateY(180deg);
+               -moz-transform: rotateY(180deg);
+                -ms-transform: rotateY(180deg);
+                 -o-transform: rotateY(180deg);
+                    transform: rotateY(180deg);
+        }
+    }
+    &.active-hover {
+        &:hover {
+            .card-body {
+                -webkit-transform: rotateY(180deg);
+                   -moz-transform: rotateY(180deg);
+                    -ms-transform: rotateY(180deg);
+                     -o-transform: rotateY(180deg);
+                        transform: rotateY(180deg);
+                .side-front {
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: opacity 1s ease-in, visibility .75s linear;
+                }
+            }
+        }
+    }
+    &.active {
+        .card-body {
+            -webkit-transform: rotateY(180deg);
+               -moz-transform: rotateY(180deg);
+                -ms-transform: rotateY(180deg);
+                 -o-transform: rotateY(180deg);
+                    transform: rotateY(180deg);
+            .side-front {
+                z-index: 0;
+                opacity: 0;
+                visibility: hidden;
+            }
+            .side-back {
+                z-index: 2;
+                opacity: 1;
+                visibility: visible;
+                transition: opacity 1s ease-in, visibility .75s linear;
+            }
+        }
+    }
+}
+
+.card-do {
+    position: relative;
+    width: 100%;
+    @include grid_3x(50px, 1fr, 100px);
+    @include grid_gap(15px);
+    .col-1 {
+        @include column_n(1);
+    }
+    .col-2 {
+        @include column_n(2);
+    }
+    .col-3 {
+        @include column_n(3);
+    }
+}
+
+
+.bubble {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 100%;
+
+    font-size: 13px;
+    font-weight: 600;
+    &.red {
+        background-color: $red;
+        color: #fff;
+    }
+    &.green {
+        background-color: $green;
+        color: #fff;
+    }
+    &.orange {
+        background-color: $orange;
+        color: #fff;
+    }
+    &.pos {
+        background-color: $pos-color;
+        color: #fff;
+    }
+    &.top-right {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+    &.top-left {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    &.top-right-fadding {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+    }
+    &.top-left-fadding {
+        position: absolute;
+        top: -10px;
+        left: -10px;
+    }
+
+    // position
+    @for $i from 0 through 100 {
+        @for $j from 0 through 100 {
+            &.position-#{$i}-#{$j} {
+                position: absolute;
+                top: 0% + $i;
+                left: 0% + $j;
+            }
         }
     }
 }
