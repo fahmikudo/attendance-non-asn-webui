@@ -37,6 +37,7 @@ class QrCode extends Component {
     }
 
     render() {
+        console.log(this.state.uuid)
         return (
             <HashRouter history={Router.browserHistory}>
                 <div className="main-content">

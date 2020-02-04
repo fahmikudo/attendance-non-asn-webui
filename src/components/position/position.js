@@ -10,7 +10,6 @@ let ct = require("../../modules/custom/customTable")
 const getMuiTheme = () => createMuiTheme(ct.customTable());
 const options = ct.customOptions();
 
-
 class Position extends Component {
     constructor() {
         super()
@@ -85,6 +84,7 @@ class Position extends Component {
         let response = await api.create('POSITION').postPosition(payload)
         if (response.ok && response.status === 200) {
             this.openSavePopUp()
+            this.getData(this.state.table_limit, this.state.table_page)
         } else {
             if (response.data && response.data.message) alert(response.data.message)
         }
@@ -99,6 +99,7 @@ class Position extends Component {
         let response = await api.create('POSITION').postPosition(payload)
         if (response.ok && response.status === 200) {
             this.openSavePopUp()
+            this.getData(this.state.table_limit, this.state.table_page)
         } else {
             if (response.data && response.data.message) alert(response.data.message)
         }
@@ -113,7 +114,7 @@ class Position extends Component {
         let response = await api.create('POSITION').deletePosition(payload.id)
         if (response.ok && response.status === 200) {
             this.setState({ deletePopUpVisible: false })
-            this.getData()
+            this.getData(this.state.table_limit, this.state.table_page)
         } else {
             if (response.data && response.data.message) alert(response.data.message)
         }

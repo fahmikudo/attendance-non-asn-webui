@@ -18,6 +18,14 @@ export function* getAuth(api, action) {
             ...response_detail.data
 		}
 		console.info(payload);
+		localStorage.setItem("access_token", payload.token);
+		const userInfo = {
+			isLoggedIn:true,
+			username:payload.username,
+			avatar:payload.employeePhotoURL,
+			
+		};
+		localStorage.setItem("user_info",JSON.stringify(userInfo));
         yield put(AuthActions.authSuccess(payload));
 	} else {
 		if (response.data && response.data.status == 500) {

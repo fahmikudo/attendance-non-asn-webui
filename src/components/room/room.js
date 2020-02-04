@@ -4,11 +4,11 @@ import MUIDataTable from "mui-datatables-bitozen";
 import LoadingBar from "react-top-loading-bar";
 import PopUp from "../../pages/PopUpAlert";
 import FormRoom from "./formroom";
+import api from "../../services/Api";
 
 let ct = require("../../modules/custom/customTable")
-
-const proxyurl = "https://cors-anywhere.herokuapp.com/";
-const url = "https://radiant-temple-76163.herokuapp.com/pertamina/";
+const getMuiTheme = () => createMuiTheme(ct.customTable());
+const options = ct.customOptions();
 
 class Room extends Component {
     constructor() {
@@ -19,7 +19,12 @@ class Room extends Component {
             rawData: [],
             dataTable: [],
             createVisible: false,
-            editVisible: false
+            editVisible: false,
+            savePopUpVisible: false,
+            table_limit: 5,
+            table_page: 0,
+            table_query: "",
+            roomCount: 0,
         }
         this.handleDelete = this.handleDelete.bind(this);
     }
@@ -50,6 +55,10 @@ class Room extends Component {
         this.setState({ deletePopUpVisible: !this.state.deletePopUpVisible, selectedIndex: index })
     };
 
+    openSavePopUp = () => {
+        this.setState({ savePopUpVisible: !this.state.savePopUpVisible })
+    };
+
     startFetch = () => {
         this.LoadingBar.continousStart()
     }
@@ -60,36 +69,106 @@ class Room extends Component {
 
     componentDidMount() {
         this.startFetch();
-        this.getData();
+        this.getData(this.state.table_limit, this.state.table_page);
     }
 
-    handleDelete = async () => {
-        this.setState({ deletePopUpVisible: false })
+    handlePopUp = () => {
+        this.getData()
+        this.setState({
+            savePopUpVisible: false,
+            createVisible: false,
+            editVisible: false
+        })
     }
 
+    handleSubmit = async (data) => {
+        let payload = {
+            "roomName": data
+        }
+        console.info('payload ==> ', payload)
+        let response = await api.create('ROOM').postRoom(payload)
+        if (response.ok && response.status === 200) {
+            this.openSavePopUp()
+            this.getData(this.state.table_limit, this.state.table_page)
+        } else {
+            if(response.data && response.data.message) alert(response.data.message)
+        }
+    }
+
+    handleUpdate = async (data) => {
+        let payload = {
+            "id": this.state.rawData[this.state.selectedIndex].id,
+            "roomName": data
+        }
+        console.info('payload ==> ', payload)
+        let response = await api.create('ROOM').postRoom(payload)
+        if (response.ok && response.status === 200) {
+            this.openSavePopUp()
+            this.getData(this.state.table_limit, this.state.table_page)
+        } else {
+            if (response.data && response.data.message) alert(response.data.messagae)
+        }
+    }
+
+    handleDelete = async (data) => {
+        let payload = {
+            "id": this.state.rawData[this.state.selectedIndex].id,
+            "roomName": data
+        }
+        console.info('payload ==> ', payload)
+        let response = await api.create('ROOM').deleteRoom(payload.id)
+        if (response.ok && response.status === 200) {
+            this.setState({ deletePopUpVisible: false })
+            this.getData(this.state.table_limit, this.state.table_page)
+        } else {
+            if (response.data && response.data.message) alert(response.data.message)
+        }
+    }
 
     getMuiTheme = () => createMuiTheme(ct.customTable());
 
     options = ct.customOptions()
 
-    getData() {
-        fetch(proxyurl + url + 'purchase_requisition')
-            .then((response) => response.json())
-            .then((responseJson) => {
-                this.onFinishFetch()
-                let dataTable = responseJson.map((value, index) => {
-                    const { plant } = value;
-                    return [
-                        index += 1,
-                        plant
-                    ]
-                })
+    async getData(limit, number){
+        let param = {
+            pageLimit: limit,
+            pageNumber: number
+        }
 
-                this.setState({
-                    rawData: responseJson,
-                    dataTable
-                })
+        let response = await api.create('ROOM').getAllPagingRoom(param)
+        if(response.status === 200){
+            let dataTable = response.data.map((value, index) => {
+                const { roomName } = value;
+                return [
+                    index += (1 + (this.state.table_page * this.state.table_limit)),
+                    roomName
+                ]
             })
+            this.setState({
+                rawData: response.data,
+                dataTable
+            })
+            this.onFinishFetch()
+        } else {
+            this.onFinishFetch()
+        }
+        this.getCountData()
+        console.log(response)
+
+    }
+
+    async getCountData() {
+        let param = {
+            pageLimit: 1000,
+            pageNumber: 0
+        }
+
+        let response = await api.create('ROOM').getAllPagingRoom(param)
+        if (response.status === 200) {
+            this.setState({
+                roomCount: response.data.length
+            })
+        }
     }
 
     columns = [
@@ -123,6 +202,36 @@ class Room extends Component {
     ]
 
     render() {
+
+        let { roomCount, table_query } = this.state
+        let tableOptions = {
+            ...options,
+            serverSide: true,
+            count: roomCount,
+            searchText: table_query,
+            onTableChange: (action, tableState) => {
+                switch (action) {
+                    case 'changePage':
+                        this.setState({ table_page: tableState.page })
+                        this.getData(tableState.rowsPerPage, tableState.page)
+                        break;
+                    case 'changeRowsPerPage':
+                        this.setState({ table_limit: tableState.rowsPerPage })
+                        this.getData(tableState.rowsPerPage, tableState.page)
+                        break;
+                    case 'search':
+                        let searchText = tableState.searchText ? tableState.searchText: ""
+                        this.setState({ table_query: searchText }, () => {
+                            this.getData(tableState.rowsPerPage, tableState.page)
+                        })
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+
         return (
             <div className="main-content">
                 <LoadingBar onRef={ref => (this.LoadingBar = ref)} />
@@ -140,9 +249,10 @@ class Room extends Component {
                     <MuiThemeProvider theme={this.getMuiTheme()}>
                         <MUIDataTable
                             title={"Ruangan"}
+                            key={roomCount}
                             data={this.state.dataTable}
                             columns={this.columns}
-                            options={this.options}
+                            options={tableOptions}
                         />
                     </MuiThemeProvider>
                 </div>
@@ -150,12 +260,22 @@ class Room extends Component {
                     <FormRoom
                         type={"create"}
                         onClickClose={this.openCreateForm}
+                        onClickSave={this.handleSubmit.bind(this)}
                     />
                 )}
                 {this.state.editVisible && (
                     <FormRoom
                         type={"update"}
+                        data={this.state.rawData[this.state.selectedIndex]}
                         onClickClose={this.openEditForm}
+                        onClickSave={this.handleUpdate.bind(this)}
+                    />
+                )}
+                {this.state.savePopUpVisible && (
+                    <PopUp
+                        type={"save"}
+                        class={"app-popup app-popup-show"}
+                        onClick={this.handlePopUp.bind(this)}
                     />
                 )}
                 {this.state.deletePopUpVisible && (

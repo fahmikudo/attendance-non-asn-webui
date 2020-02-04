@@ -62,7 +62,7 @@ class FormPosition extends Component {
                                     }
                                     type="text"
                                     className="txt txt-sekunder-color"
-                                    placeholder=""
+                                    placeholder="Nama Jabatan"
                                     required
                                     value={this.state.data.positionName}
                                     onChange={(e) => {

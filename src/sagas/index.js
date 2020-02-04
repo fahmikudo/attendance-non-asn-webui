@@ -4,7 +4,7 @@ import API from '../services/Api';
 import { AuthTypes } from '../redux/AuthRedux';
 import { getAuth } from './AuthSagas';
 
-const empApi = API.create('EMPLOYEE');
+const empApi = API.create('USERAUTH');
 
 export default function* root() {
 	yield all([

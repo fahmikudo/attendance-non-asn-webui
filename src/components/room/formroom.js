@@ -1,9 +1,19 @@
 import React, { Component } from "react";
 
+const payloadDefault = {
+    "roomName": ''
+}
+
 
 class FormRoom extends Component {
     constructor(props) {
         super(props)
+        this.state = {
+            data: props.data ? props.data :
+            {
+                payloadDefault
+            }
+        }
     }
     render() {
         return (
@@ -29,7 +39,11 @@ class FormRoom extends Component {
                             </button>
                         </div>
                     </div>
-                    <form action="#">
+                    <form action="#"
+                        onSubmit={(e) => {e.preventDefault()
+                            this.props.onClickSave(this.state.data.roomName)}
+                        }
+                    >
                         <div className="border-bottom padding-15px grid-mobile-none gap-20px">
                             <div className="margin-bottom-15px">
                                 <div className="margin-5px">
@@ -46,8 +60,16 @@ class FormRoom extends Component {
                                     }
                                     type="text"
                                     className="txt txt-sekunder-color"
-                                    placeholder=""
+                                    placeholder="Nama Ruangan"
                                     required
+                                    value={this.state.data.roomName}
+                                    onChange={(e) => {
+                                        this.setState({
+                                            data: {
+                                                roomName: e.target.value
+                                            }
+                                        })
+                                    }}
                                 />
                             </div>
                         </div>
@@ -59,7 +81,7 @@ class FormRoom extends Component {
                                         <button
                                             style={{ marginLeft: "15px" }}
                                             className="btn btn-green"
-                                            type="button"
+                                            type="submit"
                                         >
                                         <span>SAVE</span>
                                         </button>

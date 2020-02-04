@@ -3,26 +3,41 @@ import apisauce from 'apisauce';
 const create = (type = '') => {
 
     let api;
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const access_token = localStorage.getItem("access_token") || "";
     
     switch(type) {
         case 'POSITION':
             api = apisauce.create({
-                baseURL: proxyurl + 'http://35.238.229.74:8080',
-                timeout: 30000
+                baseURL: 'http://35.238.229.74:8080',
+                timeout: 30000,
+                headers: {
+                    Authorization: "Bearer " + access_token
+                }
             });
             break;
         case 'ROOM':
             api = apisauce.create({
-                baseURL: proxyurl + 'http://35.238.229.74:8080',
-                timeout: 30000
+                baseURL: 'http://35.238.229.74:8080',
+                timeout: 30000,
+                headers: {
+                    Authorization: "Bearer " + access_token
+                }
             });
             break;
         case 'EMPLOYEE':
             api = apisauce.create({
-                baseURL: proxyurl + 'http://35.238.229.74:8080',
-                timeout: 30000
+                baseURL: 'http://35.238.229.74:8080',
+                timeout: 30000,
+                headers: {
+                    Authorization: "Bearer " + access_token
+                }
             });
+            break;
+        case 'USERAUTH':
+            api = apisauce.create({
+                baseURL: 'http://35.238.229.74:8080',
+                timeout: 30000,
+            })
             break;
         default:
             break;
@@ -33,6 +48,8 @@ const create = (type = '') => {
     const deletePosition = body => api.delete('/position/' + body)
 
     const getAllPagingRoom = body => api.get('/room/paging', body);
+    const postRoom = body => api.post('/room', body)
+    const deleteRoom = body => api.delete('room/' + body)
 
     const userAuth = body => api.post('/employee/login', body);
 
@@ -47,7 +64,10 @@ const create = (type = '') => {
         postPosition,
         deletePosition,
         userAuth,
-        getUserDetail
+        getUserDetail,
+        getAllPagingRoom,
+        postRoom,
+        deleteRoom
     }
 
 
