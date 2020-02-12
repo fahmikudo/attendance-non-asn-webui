@@ -6,6 +6,8 @@ import './assets/css/circle.css'
 import 'input-moment/dist/input-moment.css'
 import 'react-times/css/material/default.css'
 import 'react-times/css/classic/default.css'
+import 'react-date-range/dist/styles.css'
+import 'react-date-range/dist/theme/default.css'
 
 import App from './App';
 import * as serviceWorker from './serviceWorker';

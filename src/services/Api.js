@@ -69,6 +69,12 @@ const create = (type = '') => {
     const postRoom = body => api.post('/room', body)
     const deleteRoom = body => api.delete('/room/' + body)
 
+    const getAllEmployee = body => api.get('/employee/paging', body)
+    const postEmployee = body => api.post('/employee/post', body)
+    const putEmployee = body => api.put('/employee/put', body)
+    const deleteEmployee = body => api.delete('/employee/' + body)
+    const uploadFotoEmployee = body => api.post('/employee/uploadFoto', body)
+
     const getAllPagingSchedule = body => api.get('/schedule/paging', body)
     const postSchedule = body => api.post('/schedule', body)
     const deleteSchedule = body => api.delete('/schedule/' + body)
@@ -99,7 +105,12 @@ const create = (type = '') => {
         deleteSchedule,
         getAllPagingLocation,
         postLocation,
-        deleteLocation
+        deleteLocation,
+        getAllEmployee,
+        postEmployee,
+        putEmployee,
+        deleteEmployee,
+        uploadFotoEmployee
     }
 
 
