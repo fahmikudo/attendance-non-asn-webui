@@ -9,6 +9,7 @@ import './App.css';
 import Position from './components/position/position'
 import Room from './components/room/room'
 import Schedule from './components/schedule/schedule'
+import Location from './components/location/location'
 
 // icon
 let angle = 'fa fa-lg fa-angle-right'
@@ -43,6 +44,15 @@ class App extends Component {
       employeeMoreIcon: angle,
     }
 
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.auth.id !== this.props.auth.id) {
+      setTimeout(() => {
+          this.props.onLogoOut(nextProps.auth.id) 
+      }, 60000) //one minute 
+  
+    }
   }
 
   render() {
@@ -130,6 +140,19 @@ class App extends Component {
                       </label>
                     </NavLink>
                   </div>
+                  <div className="app-space">
+                    <input type="radio" name="mainmenu" id="mainmenu-room" />
+                    <NavLink to='/location'>
+                      <label htmlFor="mainmenu-dashboard" className="list">
+                        <span className="app-space-icon">
+                          <i className="fa fa-1x fa-calendar" />
+                        </span>
+                        <span className="app-space-text">
+                          LOKASI
+                        </span>
+                      </label>
+                    </NavLink>
+                  </div>
                 </div>
               </div>
             </div>
@@ -159,6 +182,7 @@ class App extends Component {
                 <Route exact path="/position" component={Position} />
                 <Route exact path="/room" component={Room} />
                 <Route exact path="/schedule" component={Schedule} />
+                <Route exact path="/location" component={Location} />
               </div>
             </div>
           </div>

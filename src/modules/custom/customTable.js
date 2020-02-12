@@ -51,7 +51,7 @@ exports.customTable = function () {
           main: {
             position: 'relative',
             // top: "7px",
-            // right: "0px",
+            right: "-95px",
             width: "100% !important",
             backgroundColor: mainColor,
             zIndex: "10",

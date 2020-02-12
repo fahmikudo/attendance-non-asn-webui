@@ -1,6 +1,6 @@
 import { call, put } from 'redux-saga/effects';
 import AuthActions from '../redux/AuthRedux';
-import { isEmpty, isNil, map } from 'ramda';	
+import { isEmpty } from 'ramda';	
 
 export function* getAuth(api, action) {
 	const { data } = action;
@@ -28,7 +28,7 @@ export function* getAuth(api, action) {
 		localStorage.setItem("user_info",JSON.stringify(userInfo));
         yield put(AuthActions.authSuccess(payload));
 	} else {
-		if (response.data && response.data.status == 500) {
+		if (response.data && response.data.status === 500) {
 			return yield put(AuthActions.authFailure({
 				path: 'Sign In',
 				message: response.data.message, response

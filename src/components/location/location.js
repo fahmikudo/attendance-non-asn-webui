@@ -2,27 +2,29 @@ import React, { Component } from "react";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import MUIDataTable from "mui-datatables-bitozen";
 import LoadingBar from "react-top-loading-bar";
+import FormLocation from "./formlocation";
 import PopUp from "../../pages/PopUpAlert";
-import FormSchedule from "./formschedule";
 import api from "../../services/Api";
 
 let ct = require("../../modules/custom/customTable")
+const options = ct.customOptions();
 
-class Schedule extends Component {
-    constructor() {
+class Location extends Component {
+    constructor(){
         super()
         this.state = {
             clEditAble: '',
             editAble: false,
             rawData: [],
             dataTable: [],
-            rawDataRoom: [],
             createVisible: false,
             editVisible: false,
-            table_limit: 100,
+            savePopUpVisible: false,
+            table_limit: 5,
             table_page: 0,
+            table_query: "",
+            locationCount: 0,
         }
-        this.handleDelete = this.handleDelete.bind(this);
     }
 
     opEditAble = () => {
@@ -46,9 +48,13 @@ class Schedule extends Component {
     openEditForm = (index = null) => {
         this.setState({ editVisible: !this.state.editVisible, selectedIndex: index })
     };
- 
+
     openDeletePopup = (index) => {
         this.setState({ deletePopUpVisible: !this.state.deletePopUpVisible, selectedIndex: index })
+    };
+
+    openSavePopUp = () => {
+        this.setState({ savePopUpVisible: !this.state.savePopUpVisible })
     };
 
     startFetch = () => {
@@ -59,65 +65,85 @@ class Schedule extends Component {
         if (typeof this.LoadingBar === "object") this.LoadingBar.complete()
     }
 
-    componentDidMount() {
-        this.startFetch();
-        this.getData(this.state.table_limit, this.state.table_page);
-        this.getDataRoom(this.state.table_limit, this.state.table_page);
-    }
-
-    handleDelete = async () => {
-        let payload = {
-            "id": this.state.rawData[this.state.selectedIndex].id,
-        }
-        // console.info('payload ==> ', payload)
-        let response = await api.create('SCHEDULE').deleteSchedule(payload.id)
-        if (response.ok && response.status === 200) {
-            this.setState({ deletePopUpVisible: false })
-            this.getData(this.state.table_limit, this.state.table_page)
-        } else {
-            if (response.data && response.data.message) alert(response.data.message)
-        }
-    }
-
-    handleSubmit = async (data) => {
-        let payload = {
-            ...data
-        }
-
-        // console.log(payload)
-
-        let response = await api.create('SCHEDULE').postSchedule(payload)
-        if (response.ok && response.status === 200) {
-            this.setState({ createVisible: false, editVisible: false })
-            this.getData(this.state.table_limit, this.state.table_page)
-        } else {
-            if (response.data && response.data.message) alert(response.data.message)
-        }
-    }
-
     getMuiTheme = () => createMuiTheme(ct.customTable());
 
     options = ct.customOptions()
 
-    async getData(limit, number) {
+    componentDidMount() {
+        this.startFetch();
+        this.getData(this.state.table_limit, this.state.table_page);
+    }
+
+    handlePopUp = () => {
+        this.getData()
+        this.setState({
+            savePopUpVisible: false,
+            createVisible: false,
+            editVisible: false
+        })
+    }
+
+    handleSubmit = async (data) => {
+        console.log("DATA", data)
+        let payload = {
+            ...data
+        }
+        console.info('payload ==> ', payload)
+        let response = await api.create('LOCATION').postLocation(payload)
+        if (response.ok && response.status === 200) {
+            this.openSavePopUp()
+            this.getData(this.state.table_limit, this.state.table_page)
+        } else {
+            if (response.data && response.data.message) alert(response.data.message)
+        }
+    }
+
+    handleUpdate = async (data) => {
+        let payload = {
+            "id": this.state.rawData[this.state.selectedIndex].id,
+            ...data
+        }
+        let response = await api.create('LOCATION').postLocation(payload)
+        if (response.ok && response.status === 200) {
+            this.openSavePopUp()
+            this.getData(this.state.table_limit, this.state.table_page)
+        } else {
+            if (response.data && response.data.message) alert(response.data.message)
+        }
+    }
+
+    handleDelete = async (data) => {
+        let payload = {
+            "id": this.state.rawData[this.state.selectedIndex].id
+        }
+        let response = await api.create('LOCATION').deleteLocation(payload.id)
+        if (response.ok && response.status === 200) {
+            this.setState({deletePopUpVisible: false})
+            this.getData(this.state.table_limit, this.state.table_page)
+        } else {
+            if (response.data && response.data.message) alert(response.data.message)
+        }
+    }
+
+    async getData(limit, number){
         let param = {
             pageLimit: limit,
             pageNumber: number
         }
 
-        let response = await api.create('SCHEDULE').getAllPagingSchedule(param)
+        let response = await api.create('LOCATION').getAllPagingLocation(param)
         if (response.status === 200) {
             let dataTable = response.data.map((value, index) => {
-                let { shift, startTime, endTime, employee, room } = value
+                const { locationName, latitude, longitude, radius } = value
                 return [
                     index += (1 + (this.state.table_page * this.state.table_limit)),
-                    employee.firstName + ' ' + employee.lastName,
-                    room.roomName,
-                    shift,
-                    startTime,
-                    endTime
+                    locationName,
+                    latitude,
+                    longitude,
+                    radius
                 ]
             })
+
             this.setState({
                 rawData: response.data,
                 dataTable
@@ -126,62 +152,41 @@ class Schedule extends Component {
         } else {
             this.onFinishFetch()
         }
+
+        this.getCountData()
+        console.log(response)
+
+
     }
 
-    async getDataRoom(limit, number) {
+    async getCountData() {
+
         let param = {
-            pageLimit: limit,
-            pageNumber: number
+            pageLimit: 1000,
+            pageNumber: 0
         }
 
-        let response = await api.create('ROOM').getAllPagingRoom(param)
+        let response = await api.create('LOCATION').getAllPagingLocation(param)
         if (response.status === 200) {
             this.setState({
-                rawDataRoom: response.data
+                locationCount: response.data.length
             })
-            this.onFinishFetch()
-        } else {
-            this.onFinishFetch()
         }
     }
 
-    // async getDataEmployee(limit, number) {
-    //     let param = {
-    //         pageLimit: limit,
-    //         pageNumber: number
-    //     }
-
-    //     let response = await api.create('EMPLOYEE').getAllPagingRoom(param)
-    //     if (response.status === 200) {
-    //         let dataTableRoom = response.data.map((value, index) => {
-    //             let { id } = value
-    //             return [
-    //                 index += (1 + (this.state.table_page * this.state.table_limit)),
-    //             ]
-    //         })
-    //         this.setState({
-    //             rawDataRoom: response.data,
-    //             dataTableRoom
-    //         })
-    //         this.onFinishFetch()
-    //     } else {
-    //         this.onFinishFetch()
-    //     }
-    // }
 
     columns = [
         "No",
-        "Nama Pegawai",
-        "Nama Ruangan",
-        "Shift",
-        "Jam Masuk",
-        "Jam Pulang",
+        "Nama Lokasi",
+        "Latitude",
+        "Longitude",
+        "Radius",
         {
             name: "Action",
             options: {
                 customBodyRender: (val, tableMeta) => {
                     return (
-                        <div className="display-flex-normal">
+                        <div>
                             <button
                                 className="btn btn-green btn-small-circle"
                                 style={{ marginRight: 5 }}
@@ -203,37 +208,73 @@ class Schedule extends Component {
         }
     ]
 
-    render() {
+    render(){
+
+        let { locationCount, table_query } = this.state
+        let tableOptions = {
+            ...options,
+            serverSide: true,
+            count: locationCount,
+            searchText: table_query,
+            onTableChange: (action, tableState) => {
+                switch (action) {
+                    case 'changePage':
+                        this.setState({ table_page: tableState.page })
+                        this.getData(tableState.rowsPerPage, tableState.page);
+                        break;
+                    case 'changeRowsPerPage':
+                        this.setState({ table_limit: tableState.rowsPerPage })
+                        this.getData(tableState.rowsPerPage, tableState.page);
+                        break;
+                    case 'search':
+                        let searchText = tableState.searchText ? tableState.searchText : ""
+                        this.setState({ table_query: searchText }, () => {
+                            this.getData(tableState.rowsPerPage, tableState.page)
+                        })
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+
         return (
             <div className="main-content">
                 <LoadingBar onRef={ref => (this.LoadingBar = ref)} />
                 <div className="padding-5px">
                     <MuiThemeProvider theme={this.getMuiTheme()}>
                         <MUIDataTable
-                            title={"Jadwal"}
+                            title={"Lokasi"}
+                            key={locationCount}
                             data={this.state.dataTable}
                             columns={this.columns}
-                            options={this.options}
+                            options={tableOptions}
                             buttonCreate={true}
                             onCreate={this.openCreateForm.bind(this)}
                         />
                     </MuiThemeProvider>
                 </div>
                 {this.state.createVisible && (
-                    <FormSchedule
+                    <FormLocation
                         type={"create"}
-                        payloadRoom={this.state.rawDataRoom}
                         onClickClose={this.openCreateForm}
-                        onSave={this.handleSubmit.bind(this)}
+                        onClickSave={this.handleSubmit.bind(this)}
                     />
                 )}
                 {this.state.editVisible && (
-                    <FormSchedule
+                    <FormLocation
                         type={"update"}
-                        payload={this.state.rawData[this.state.selectedIndex]}
-                        payloadRoom={this.state.rawDataRoom}
+                        data={this.state.rawData[this.state.selectedIndex]}
                         onClickClose={this.openEditForm}
-                        onSave={this.handleSubmit.bind(this)}
+                        onClickSave={this.handleUpdate.bind(this)}
+                    />
+                )}
+                {this.state.savePopUpVisible && (
+                    <PopUp
+                        type={"save"}
+                        class={"app-popup app-popup-show"}
+                        onClick={this.handlePopUp.bind(this)}
                     />
                 )}
                 {this.state.deletePopUpVisible && (
@@ -249,4 +290,4 @@ class Schedule extends Component {
     }
 }
 
-export default Schedule
+export default Location

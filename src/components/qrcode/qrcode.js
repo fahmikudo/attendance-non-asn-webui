@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, HashRouter, Redirect, NavLink } from "react-router-dom";
+import { BrowserRouter as Router, HashRouter } from "react-router-dom";
 import LoadingBar from 'react-top-loading-bar';
 import QRCode from 'qrcode.react';
 import uuid from 'uuid';

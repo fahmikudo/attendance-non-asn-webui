@@ -60,7 +60,7 @@ class Pages extends Component {
           disabled={this.props.disabled}
           // theme="material"
           // timeMode="12"
-          // timezone="America/New_York"
+          timezone="Asia/Jakarta"
           onFocusChange={this.onFocusChange.bind(this)}
           onTimeChange={this.onTimeChange.bind(this)}
         />

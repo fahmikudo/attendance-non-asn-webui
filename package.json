@@ -14,7 +14,7 @@
         "moment-timezone": "^0.5.26",
         "input-moment": "^0.4.0",
         "mui-datatables": "^2.6.1",
-        "mui-datatables-bitozen": "^1.0.0",
+        "mui-datatables-bitozen": "^4.0.0",
         "qrcode.react": "^1.0.0",
         "ramda": "^0.26.1",
         "react": "^16.12.0",

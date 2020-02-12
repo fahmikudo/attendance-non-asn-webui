@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { NavLink } from "react-router-dom"
 import AuthAction from '../../redux/AuthRedux'
 import { connect } from 'react-redux'
-import * as R from 'ramda'
 
 var opActivePopup = 'app-small-profile active'
 var clActivePopup = 'app-small-profile'

@@ -7,7 +7,6 @@ import FormRoom from "./formroom";
 import api from "../../services/Api";
 
 let ct = require("../../modules/custom/customTable")
-const getMuiTheme = () => createMuiTheme(ct.customTable());
 const options = ct.customOptions();
 
 class Room extends Component {
@@ -235,7 +234,7 @@ class Room extends Component {
         return (
             <div className="main-content">
                 <LoadingBar onRef={ref => (this.LoadingBar = ref)} />
-                <div className="col-2 content-right">
+                {/* <div className="col-2 content-right">
                     <button
                         type="button"
                         className="btn btn-circle background-green"
@@ -244,7 +243,7 @@ class Room extends Component {
                     >
                         <i className="fa fa-1x fa-plus" />
                     </button>
-                </div>
+                </div> */}
                 <div className="padding-5px">
                     <MuiThemeProvider theme={this.getMuiTheme()}>
                         <MUIDataTable
@@ -253,6 +252,8 @@ class Room extends Component {
                             data={this.state.dataTable}
                             columns={this.columns}
                             options={tableOptions}
+                            buttonCreate={true}
+                            onCreate={this.openCreateForm.bind(this)}
                         />
                     </MuiThemeProvider>
                 </div>
