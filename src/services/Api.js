@@ -60,6 +60,15 @@ const create = (type = '') => {
                 }
             })
             break
+        case 'REPORT':
+            api = apisauce.create({
+                baseURL: 'http://35.238.229.74:8080',
+                timeout: 30000,
+                headers: {
+                    Authorization: "Bearer " + access_token
+                }
+            })
+            break
         case 'USERAUTH':
             api = apisauce.create({
                 baseURL: 'http://35.238.229.74:8080',
@@ -98,6 +107,12 @@ const create = (type = '') => {
     const getAllPagingAttendance = body => api.get('/attendance/paging', body)
     const getAllAttendance = body => api.get('/attendance', body)
 
+    const downloadReport = body => api.get('/report/attendance.report', body, {
+        headers: {
+            Authorization: "Bearer " + access_token
+        }
+    })
+
     const userAuth = body => api.post('/employee/login', body)
 
     const getUserDetail = body => api.get('/employee/isLogin', {}, {
@@ -130,7 +145,8 @@ const create = (type = '') => {
         uploadFotoEmployee,
         downloadFotoEmployee,
         getAllPagingAttendance,
-        getAllAttendance
+        getAllAttendance,
+        downloadReport
     }
 
 
