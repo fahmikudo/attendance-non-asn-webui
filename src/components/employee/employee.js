@@ -270,7 +270,7 @@ class Employee extends Component {
                 )}
                 {this.state.editVisible && (
                     <FormEmployee
-                        type={"update"}
+                        type={"edit"}
                         tablePosition={this.state.dataTablePosition}
                         payload={this.state.rawData[this.state.selectedIndex]}
                         onClickClose={this.openEditForm}

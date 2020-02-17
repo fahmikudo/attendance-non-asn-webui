@@ -1,8 +1,12 @@
-import React, { Component } from "react";
+import React, { Component } from "react"
 import CalendarPicker from '../../modules/popup/Calendar'
+// import UploadFile from '../../modules/upload/upload'
+import Dropzone from 'react-dropzone'
+import Loader from 'react-loader-spinner'
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles"
 import MUIDataTable from "mui-datatables-bitozen"
-import M from 'moment'
+import api from "../../services/Api"
+// import M from 'moment'
 
 let ct = require("../../modules/custom/customTable")
 
@@ -41,7 +45,9 @@ class FormEmployee extends Component {
                 }
                 : defaultPayload,
             dataTablePosition: props.tablePosition ? props.tablePosition : [],
-            visiblePopupPosition: false
+            visiblePopupPosition: false,
+            loading: false,
+            imageUrl: ''
         }
     }
 
@@ -74,7 +80,37 @@ class FormEmployee extends Component {
     ]
 
     componentDidMount() {
-        console.log('mount', this.state.dataTablePosition)
+        console.log('mount', this.state.dataDetail)
+        this.getImageBlob(this.state.dataDetail.id, this.state.dataDetail.employeePhotoURL)
+    }
+
+    async getImageBlob(id, fileName) {
+        let payload = id+'/'+fileName
+        let res = await api.create("EMPLOYEE").downloadFotoEmployee(payload)
+        if (res && res.status === 200) {
+            return this.setState({ 
+                imageUrl: res.config.url
+            })
+        }
+        console.log(res)
+    }
+
+    async onDrop(acceptedFiles) {
+        const formData = new FormData()
+        formData.append('file', acceptedFiles[0])
+        formData.append('id', this.state.dataDetail.id)
+        let response = await api.create('EMPLOYEE').uploadFotoEmployee(formData)
+        if (response && response.status === 200) {
+            this.setState({
+                dataDetail: {
+                    ...this.state.dataDetail,
+                    employeePhotoURL: response.data.fileName
+                }
+            })
+            this.getImageBlob(this.state.dataDetail.id, response.data.fileName)
+        } else {
+            alert(response.data.message)
+        }
     }
 
     onClickVisiblePosition = () => {
@@ -175,6 +211,62 @@ class FormEmployee extends Component {
                             </button>
                         </div>
                     </div>
+                    
+                    {this.props.type === "edit" ? (
+                        <div className="margin-30px">
+                            <div className="width width-160px width-center">
+                                <div
+                                    className="image image-160px image-circle margin-bottom-20px"
+                                    style={{
+                                        margin: "auto",
+                                        backgroundColor: "#f8f8f8",
+                                    }}>
+                                    {this.state.loading && (
+                                        <Loader
+                                            type="ThreeDots"
+                                            style={{display:'flex', justifyContent:'center',marginTop:45}}
+                                            color={"#somecolor"}
+                                            height={80}
+                                            width={80}
+                                            loading={this.state.loading}
+                                    />
+                                    )}
+                                    {(this.state.imageUrl === "")
+                                        ? this.state.loading === true ? <i />
+                                        : (<i className="icn far fa-user fa-3x" />)
+                                        : (<img src={this.state.imageUrl} alt="img" />)
+                                    }
+                                </div>
+                                <div>
+                                    {this.props.type !== 'view'
+                                        ?
+                                        <button
+                                        className="btn btn-red btn-small-circle"
+                                        type="button"
+                                        align="center"
+                                        style={{
+                                            position: "absolute",
+                                            bottom: "30px",
+                                            right: "0"
+                                        }}
+                                        >
+                                        <Dropzone onDrop={this.onDrop.bind(this)}>
+                                            {({ getRootProps, getInputProps }) => (
+                                            <div {...getRootProps()}>
+                                                <input {...getInputProps()} />
+                                                <i className="fa fa-lw fa-pencil-alt"></i>
+                                            </div>
+                                            )}
+                                        </Dropzone>
+                                        </button>
+                                        : null}
+                                </div>
+                                <div style={{ textAlign: "center" }}>
+                                    <span style={{ color: "red", fontSize: 11, marginBottom: 5 }}>*Image max 1Mb</span>
+                                </div>
+                            </div>
+                        </div>
+                    ) : null}
 
                     <form 
                         action="#" 
@@ -348,6 +440,31 @@ class FormEmployee extends Component {
                                 <div className="margin-bottom-15px">
                                     <div className="margin-5px">
                                         <span className="txt-site txt-11 txt-main txt-bold">
+                                            Jabatan
+                                        </span>
+                                    </div>
+
+                                    <div className="card-date-picker" >
+                                        <div className="double">
+                                            <div className="input">
+                                            <input
+                                                type="text"
+                                                className="ip"
+                                                value={dataDetail.position.positionName}
+                                                readOnly />
+                                            </div>
+                                            <button
+                                                type="button"
+                                                className="btn btn-grey border-left btn-no-radius"
+                                                onClick={this.onClickVisiblePosition.bind(this)}>
+                                                <i className="fa fa-lg fa-search" />
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="margin-bottom-15px">
+                                    <div className="margin-5px">
+                                        <span className="txt-site txt-11 txt-main txt-bold">
                                             Role
                                         </span>
                                     </div>
@@ -485,59 +602,25 @@ class FormEmployee extends Component {
                                         value={dataDetail.nik}
                                     />
                                 </div>
-                                <div className="margin-bottom-15px">
-                                    <div className="margin-5px">
-                                        <span className="txt-site txt-11 txt-main txt-bold">
-                                            Jabatan
-                                        </span>
-                                    </div>
-
-                                    <div className="card-date-picker" >
-                                        <div className="double">
-                                            <div className="input">
-                                            <input
-                                                type="text"
-                                                className="ip"
-                                                value={dataDetail.position.positionName}
-                                                readOnly />
-                                            </div>
-                                            <button
-                                                type="button"
-                                                className="btn btn-grey border-left btn-no-radius"
-                                                onClick={this.onClickVisiblePosition.bind(this)}>
-                                                <i className="fa fa-lg fa-search" />
-                                            </button> 
-                                        </div>
-                                    </div>
-                                </div>
-                                {this.props.type === "edit" ? <div className="margin-bottom-15px">
+                                {/* {this.props.type === "edit" ? <div className="margin-bottom-15px">
                                     <div className="margin-5px">
                                         <span className="txt-site txt-11 txt-main txt-bold">
                                             Upload foto
                                         </span>
                                     </div>
-                                    <input
-                                        readOnly={this.props.type === "view" ? true : false}
-                                        style={
-                                            this.props.type === "view"
-                                                ? { backgroundColor: "#E6E6E6" }
-                                                : null
-                                        }
-                                        type="text"
-                                        className="txt txt-sekunder-color"
-                                        placeholder=""
-                                        required
-                                        onChange={(e) => {
-                                            this.setState({
-                                                dataDetail: {
-                                                    ...this.state.dataDetail,
-                                                    employeePhotoURL: e.target.value
-                                                }
-                                            })
+                                    <UploadFile
+                                        type={this.state.uploadStatus}
+                                        percentage={this.state.percentage} 
+                                        result={false}
+                                        acceptedFiles={['png','jpg','jpeg']}
+                                        onHandle={(dt) => {
+                                            this.handleChange(dt)
                                         }}
-                                        value={dataDetail.employeePhotoURL}
+                                        onUpload={() => {
+                                          this.uploadDocument()  
+                                        }}
                                     />
-                                </div> : null}
+                                </div> : null} */}
                             </div>
                         </div>
 

@@ -11,6 +11,7 @@ import Room from './components/room/room'
 import Schedule from './components/schedule/schedule'
 import Location from './components/location/location'
 import Employee from './components/employee/employee'
+import Attendance from './components/attendance/attendance'
 
 // icon
 let angle = 'fa fa-lg fa-angle-right'
@@ -167,6 +168,19 @@ class App extends Component {
                       </label>
                     </NavLink>
                   </div>
+                  <div className="app-space">
+                    <input type="radio" name="mainmenu" id="mainmenu-room" />
+                    <NavLink to='/attendance'>
+                      <label htmlFor="mainmenu-dashboard" className="list">
+                        <span className="app-space-icon">
+                          <i className="fa fa-1x fa-clock" />
+                        </span>
+                        <span className="app-space-text">
+                          ABSENSI
+                        </span>
+                      </label>
+                    </NavLink>
+                  </div>
                 </div>
               </div>
             </div>
@@ -198,6 +212,7 @@ class App extends Component {
                 <Route exact path="/schedule" component={Schedule} />
                 <Route exact path="/location" component={Location} />
                 <Route exact path="/employee" component={Employee} />
+                <Route exact path="/attendance" component={Attendance} />
               </div>
             </div>
           </div>

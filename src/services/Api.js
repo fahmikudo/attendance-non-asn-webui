@@ -15,6 +15,15 @@ const create = (type = '') => {
                 }
             })
             break
+        case 'ATTENDANCE':
+            api = apisauce.create({
+                baseURL: 'http://35.238.229.74:8080',
+                timeout: 30000,
+                headers: {
+                    Authorization: "Bearer " + access_token
+                }
+            })
+            break
         case 'ROOM':
             api = apisauce.create({
                 baseURL: 'http://35.238.229.74:8080',
@@ -76,6 +85,7 @@ const create = (type = '') => {
     const putEmployee = body => api.put('/employee/put', body)
     const deleteEmployee = body => api.delete('/employee/' + body)
     const uploadFotoEmployee = body => api.post('/employee/uploadFoto', body)
+    const downloadFotoEmployee = body => api.get('/employee/downloadFile/' + body)
 
     const getAllPagingSchedule = body => api.get('/schedule/paging', body)
     const postSchedule = body => api.post('/schedule', body)
@@ -84,6 +94,9 @@ const create = (type = '') => {
     const getAllPagingLocation = body => api.get('/location/paging', body)
     const postLocation = body => api.post('/location', body)
     const deleteLocation = body => api.delete('/location/' + body)
+
+    const getAllPagingAttendance = body => api.get('/attendance/paging', body)
+    const getAllAttendance = body => api.get('/attendance', body)
 
     const userAuth = body => api.post('/employee/login', body)
 
@@ -114,7 +127,10 @@ const create = (type = '') => {
         postEmployee,
         putEmployee,
         deleteEmployee,
-        uploadFotoEmployee
+        uploadFotoEmployee,
+        downloadFotoEmployee,
+        getAllPagingAttendance,
+        getAllAttendance
     }
 
 
