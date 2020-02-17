@@ -15,19 +15,68 @@ class Employee extends Component {
         this.state = {
             rawData: [],
             dataTable: [],
+            rawDataPosition: [],
+            dataTablePosition: [],
             deletePopUpVisible: false,
             createVisible: false,
             editVisible: false,
             deletePopUpVisible: false,
             selectedIndex: 0,
             limit: 5,
-            number: 0
+            number: 0,
+            table_query: "",
+            positionCount: 0
         }
     }
 
     componentDidMount() {
         this.startFetch()
         this.getData(this.state.limit, this.state.number)
+        this.getDataPosition()
+        this.getCountData()
+    }
+
+    async getDataPosition() {
+        let param = {
+            pageLimit: 1000,
+            pageNumber: 0
+        }
+
+        let response = await api.create('POSITION').getAllPosition(param)
+        if (response.status === 200) {
+            let dataTablePosition = response.data.map((value, index) => {
+                const { id, positionName } = value;
+                return [
+                    index += 1,
+                    id,
+                    positionName
+                ]
+            })
+
+            this.setState({
+                rawDataPosition: response.data,
+                dataTablePosition
+            })
+        } else {
+            this.onFinishFetch()
+        }
+    }
+
+    async getCountData() {
+
+        let param = {
+            pageLimit: 1000,
+            pageNumber: 0
+        }
+
+        let response = await api.create('EMPLOYEE').getAllPagingEmployee(param)
+        if (response.status === 200) {
+            this.setState({
+                positionCount: response.data.length
+            })
+        }
+
+        console.log(response)
     }
 
     async getData(limit, number) {
@@ -67,7 +116,8 @@ class Employee extends Component {
             ...data,
             birthDate: M(data.birthDate).format("YYYY-MM-DD")
         }
-        let response = api.create('EMPLOYEE').postEmployee(payload)
+        console.log(payload)
+        let response = await api.create('EMPLOYEE').postEmployee(payload)
         if (response.ok && response.status === 200) {
             this.setState({ createVisible: false, editVisible: false })
             this.getData(this.state.limit, this.state.number)
@@ -82,7 +132,7 @@ class Employee extends Component {
             ...data,
             birthDate: M(data.birthDate).format("YYYY-MM-DD")
         }
-        let response = api.create('EMPLOYEE').putEmployee(payload)
+        let response = await api.create('EMPLOYEE').putEmployee(payload)
         if (response.ok && response.status === 200) {
             this.setState({ createVisible: false, editVisible: false })
             this.getData(this.state.limit, this.state.number)
@@ -166,6 +216,33 @@ class Employee extends Component {
     ]
 
     render() {
+        let {positionCount, table_query} = this.state
+        let tableOptions = {
+            ...this.options,
+            serverSide: true,
+            count: positionCount,
+            searchText: table_query,
+            onTableChange: (action, tableState) => {
+                switch (action) {
+                    case 'changePage':
+                        this.setState({ table_page: tableState.page })
+                        this.getData(tableState.rowsPerPage, tableState.page);
+                        break;
+                    case 'changeRowsPerPage':
+                        this.setState({ table_limit: tableState.rowsPerPage })
+                        this.getData(tableState.rowsPerPage, tableState.page);
+                        break;
+                    case 'search':
+                        let searchText = tableState.searchText ? tableState.searchText : ""
+                        this.setState({ table_query: searchText }, () => {
+                            this.getData(tableState.rowsPerPage, tableState.page)
+                        })
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
         return (
             <div className="main-content">
                 <LoadingBar onRef={ref => (this.LoadingBar = ref)} />
@@ -173,9 +250,10 @@ class Employee extends Component {
                     <MuiThemeProvider theme={this.getMuiTheme()}>
                         <MUIDataTable
                             title={"Pegawai"}
+                            key={positionCount}
                             data={this.state.dataTable}
                             columns={this.columns}
-                            options={this.options}
+                            options={tableOptions}
                             buttonCreate={true}
                             onCreate={this.openCreateForm.bind(this)}
                         />
@@ -185,6 +263,7 @@ class Employee extends Component {
                 {this.state.createVisible && (
                     <FormEmployee
                         type={"create"}
+                        tablePosition={this.state.dataTablePosition}
                         onClickClose={this.openCreateForm}
                         onSave={this.handleSubmit.bind(this)}
                     />
@@ -192,6 +271,7 @@ class Employee extends Component {
                 {this.state.editVisible && (
                     <FormEmployee
                         type={"update"}
+                        tablePosition={this.state.dataTablePosition}
                         payload={this.state.rawData[this.state.selectedIndex]}
                         onClickClose={this.openEditForm}
                         onSave={this.handleUpdate.bind(this)}

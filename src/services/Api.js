@@ -62,6 +62,7 @@ const create = (type = '') => {
     }
 
     const getAllPagingPosition = body => api.get('/position/paging' , body)
+    const getAllPosition = body => api.get('/position' , body)
     const postPosition = body => api.post('/position', body)
     const deletePosition = body => api.delete('/position/' + body)
 
@@ -69,6 +70,7 @@ const create = (type = '') => {
     const postRoom = body => api.post('/room', body)
     const deleteRoom = body => api.delete('/room/' + body)
 
+    const getAllPagingEmployee = body => api.get('/employee', body)
     const getAllEmployee = body => api.get('/employee/paging', body)
     const postEmployee = body => api.post('/employee/post', body)
     const putEmployee = body => api.put('/employee/put', body)
@@ -93,6 +95,7 @@ const create = (type = '') => {
 
     return {
         getAllPagingPosition,
+        getAllPosition,
         postPosition,
         deletePosition,
         userAuth,
@@ -106,6 +109,7 @@ const create = (type = '') => {
         getAllPagingLocation,
         postLocation,
         deleteLocation,
+        getAllPagingEmployee,
         getAllEmployee,
         postEmployee,
         putEmployee,
