@@ -11,6 +11,9 @@ const create = (type = '') => {
                 baseURL: 'http://35.238.229.74:8080',
                 timeout: 30000,
                 headers: {
+                    'Cache-Control': 'no-cache',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
                     Authorization: "Bearer " + access_token
                 }
             })
@@ -20,6 +23,9 @@ const create = (type = '') => {
                 baseURL: 'http://35.238.229.74:8080',
                 timeout: 30000,
                 headers: {
+                    'Cache-Control': 'no-cache',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
                     Authorization: "Bearer " + access_token
                 }
             })
@@ -29,6 +35,9 @@ const create = (type = '') => {
                 baseURL: 'http://35.238.229.74:8080',
                 timeout: 30000,
                 headers: {
+                    'Cache-Control': 'no-cache',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
                     Authorization: "Bearer " + access_token
                 }
             })
@@ -38,6 +47,9 @@ const create = (type = '') => {
                 baseURL: 'http://35.238.229.74:8080',
                 timeout: 30000,
                 headers: {
+                    'Cache-Control': 'no-cache',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
                     Authorization: "Bearer " + access_token
                 }
             })
@@ -47,6 +59,9 @@ const create = (type = '') => {
                 baseURL: 'http://35.238.229.74:8080',
                 timeout: 30000,
                 headers: {
+                    'Cache-Control': 'no-cache',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
                     Authorization: "Bearer " + access_token
                 }
             })
@@ -56,6 +71,9 @@ const create = (type = '') => {
                 baseURL: 'http://35.238.229.74:8080',
                 timeout: 30000,
                 headers: {
+                    'Cache-Control': 'no-cache',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
                     Authorization: "Bearer " + access_token
                 }
             })
@@ -65,6 +83,9 @@ const create = (type = '') => {
                 baseURL: 'http://35.238.229.74:8080',
                 timeout: 30000,
                 headers: {
+                    'Cache-Control': 'no-cache',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
                     Authorization: "Bearer " + access_token
                 }
             })
@@ -73,6 +94,11 @@ const create = (type = '') => {
             api = apisauce.create({
                 baseURL: 'http://35.238.229.74:8080',
                 timeout: 30000,
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'    
+                }
             })
             break
         default:
