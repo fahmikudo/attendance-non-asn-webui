@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "29989c0ad497a0f306b9308c97cb5b5e",
+    "revision": "5030c65241bc577e311ccf520d485918",
     "url": "/attendance-non-asn-webui/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/attendance-non-asn-webui/static/css/2.6513b572.chunk.css"
   },
   {
-    "revision": "6cab6d3e8800eb548a59",
+    "revision": "d31860d5844dbb1a75d9",
     "url": "/attendance-non-asn-webui/static/css/main.0450500e.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/attendance-non-asn-webui/static/js/2.d3480bf3.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "6cab6d3e8800eb548a59",
-    "url": "/attendance-non-asn-webui/static/js/main.3761dce2.chunk.js"
+    "revision": "d31860d5844dbb1a75d9",
+    "url": "/attendance-non-asn-webui/static/js/main.d739349e.chunk.js"
   },
   {
     "revision": "b4a311fddc5998cbfbf7",
