@@ -4,11 +4,12 @@ const create = (type = '') => {
 
     let api
     const access_token = localStorage.getItem("access_token") || ""
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
     
     switch(type) {
         case 'POSITION':
             api = apisauce.create({
-                baseURL: 'http://35.238.229.74:8080',
+                baseURL: proxyurl + 'http://35.238.229.74:8080',
                 timeout: 30000,
                 headers: {
                     'Cache-Control': 'no-cache',
@@ -20,7 +21,7 @@ const create = (type = '') => {
             break
         case 'ATTENDANCE':
             api = apisauce.create({
-                baseURL: 'http://35.238.229.74:8080',
+                baseURL: proxyurl + 'http://35.238.229.74:8080',
                 timeout: 30000,
                 headers: {
                     'Cache-Control': 'no-cache',
@@ -32,7 +33,7 @@ const create = (type = '') => {
             break
         case 'ROOM':
             api = apisauce.create({
-                baseURL: 'http://35.238.229.74:8080',
+                baseURL: proxyurl + 'http://35.238.229.74:8080',
                 timeout: 30000,
                 headers: {
                     'Cache-Control': 'no-cache',
@@ -44,7 +45,7 @@ const create = (type = '') => {
             break
         case 'EMPLOYEE':
             api = apisauce.create({
-                baseURL: 'http://35.238.229.74:8080',
+                baseURL: proxyurl + 'http://35.238.229.74:8080',
                 timeout: 30000,
                 headers: {
                     'Cache-Control': 'no-cache',
@@ -56,7 +57,7 @@ const create = (type = '') => {
             break
         case 'SCHEDULE':
             api = apisauce.create({
-                baseURL: 'http://35.238.229.74:8080',
+                baseURL: proxyurl + 'http://35.238.229.74:8080',
                 timeout: 30000,
                 headers: {
                     'Cache-Control': 'no-cache',
@@ -68,7 +69,7 @@ const create = (type = '') => {
             break
         case 'LOCATION':
             api = apisauce.create({
-                baseURL: 'http://35.238.229.74:8080',
+                baseURL: proxyurl + 'http://35.238.229.74:8080',
                 timeout: 30000,
                 headers: {
                     'Cache-Control': 'no-cache',
@@ -80,7 +81,7 @@ const create = (type = '') => {
             break
         case 'REPORT':
             api = apisauce.create({
-                baseURL: 'http://35.238.229.74:8080',
+                baseURL: proxyurl + 'http://35.238.229.74:8080',
                 timeout: 30000,
                 headers: {
                     'Cache-Control': 'no-cache',
@@ -92,7 +93,7 @@ const create = (type = '') => {
             break
         case 'USERAUTH':
             api = apisauce.create({
-                baseURL: 'http://35.238.229.74:8080',
+                baseURL: proxyurl + 'http://35.238.229.74:8080',
                 timeout: 30000,
                 headers: {
                     'Cache-Control': 'no-cache',
