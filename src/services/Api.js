@@ -12,7 +12,7 @@ const create = (type = '') => {
                 timeout: 30000,
                 headers: {
                     'Cache-Control': 'no-cache',
-                    'Accept': 'application/json',
+                    Accept: 'application/json',
                     'Content-Type': 'application/json',
                     Authorization: "Bearer " + access_token
                 }
@@ -24,7 +24,7 @@ const create = (type = '') => {
                 timeout: 30000,
                 headers: {
                     'Cache-Control': 'no-cache',
-                    'Accept': 'application/json',
+                    Accept: 'application/json',
                     'Content-Type': 'application/json',
                     Authorization: "Bearer " + access_token
                 }
@@ -36,7 +36,7 @@ const create = (type = '') => {
                 timeout: 30000,
                 headers: {
                     'Cache-Control': 'no-cache',
-                    'Accept': 'application/json',
+                    Accept: 'application/json',
                     'Content-Type': 'application/json',
                     Authorization: "Bearer " + access_token
                 }
@@ -48,7 +48,7 @@ const create = (type = '') => {
                 timeout: 30000,
                 headers: {
                     'Cache-Control': 'no-cache',
-                    'Accept': 'application/json',
+                    Accept: 'application/json',
                     'Content-Type': 'application/json',
                     Authorization: "Bearer " + access_token
                 }
@@ -60,7 +60,7 @@ const create = (type = '') => {
                 timeout: 30000,
                 headers: {
                     'Cache-Control': 'no-cache',
-                    'Accept': 'application/json',
+                    Accept: 'application/json',
                     'Content-Type': 'application/json',
                     Authorization: "Bearer " + access_token
                 }
@@ -72,7 +72,7 @@ const create = (type = '') => {
                 timeout: 30000,
                 headers: {
                     'Cache-Control': 'no-cache',
-                    'Accept': 'application/json',
+                    Accept: 'application/json',
                     'Content-Type': 'application/json',
                     Authorization: "Bearer " + access_token
                 }
@@ -84,7 +84,7 @@ const create = (type = '') => {
                 timeout: 30000,
                 headers: {
                     'Cache-Control': 'no-cache',
-                    'Accept': 'application/json',
+                    Accept: 'application/json',
                     'Content-Type': 'application/json',
                     Authorization: "Bearer " + access_token
                 }
@@ -96,7 +96,7 @@ const create = (type = '') => {
                 timeout: 30000,
                 headers: {
                     'Cache-Control': 'no-cache',
-                    'Accept': 'application/json',
+                    'Accept': 'application/json;charset=UTF-8',
                     'Content-Type': 'application/json'    
                 }
             })
